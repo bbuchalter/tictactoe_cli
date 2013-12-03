@@ -47,7 +47,7 @@ All set! Press ENTER to begin the game.
       player = SetupCLI.setup_player("Brian", "X", :blue)
       assert_equal "X", player.name
       assert_equal :blue, player.color
-      assert_equal [WinNowStrategy, SimpleStrategy], player.strategies
+      assert_equal Strategies.for_computer, player.strategies
     }
   end
 end

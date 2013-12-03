@@ -5,9 +5,7 @@ require "play_cli"
 require "tictactoe"
 require "board"
 require "player"
-require "strategies/simple_strategy"
-require "strategies/user_input_strategy"
-require "strategies/win_now_strategy"
+require "strategies"
 
 class PlayCLITest < Minitest::Test
   def test_simple_strategy

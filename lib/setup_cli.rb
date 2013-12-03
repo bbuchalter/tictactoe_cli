@@ -1,9 +1,7 @@
 require "tictactoe"
 require "board"
 require "player"
-require "strategies/win_now_strategy"
-require "strategies/simple_strategy"
-require "strategies/user_input_strategy"
+require "strategies"
 require "play_cli"
 require "cli_helpers"
 
@@ -26,7 +24,7 @@ class SetupCLI
 
   def self.setup_player(name, symbol, color)
     if player_is_computer(color, name).downcase == "y"
-      player = Player.new(symbol, [WinNowStrategy, SimpleStrategy], color)
+      player = Player.new(symbol, Strategies.for_computer, color)
       puts colored_message("Ok, #{symbol}'s will be played by the computer.", color)
     else
       player = Player.new(symbol, [UserInputStrategy], color)
