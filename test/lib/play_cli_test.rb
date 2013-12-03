@@ -128,6 +128,63 @@ Would you like to play again? [Y\n] }
     assert_equal expected_output, FakeIO.each_input(["9", "5", "3", "8", "n"]) { cli.play_game }
   end
 
+  def test_block_opponent_strategy
+    game = TicTacToe.new(Board.new)
+    player1 = Player.new("X", [UserInputStrategy], :blue)
+    player2 = Player.new("O", [WinNowStrategy, BlockOpponentStrategy, SimpleStrategy], :blue)
+    cli = PlayCLI.new(game, player1, player2)
+    expected_output = %q{
+Turn 1.
+X's turn.
+1|2|3
+4|5|6
+7|8|9
+What move would you like to make? 
+Turn 2.
+O's turn.
+X|2|3
+4|5|6
+7|8|9
+
+Turn 3.
+X's turn.
+X|O|3
+4|5|6
+7|8|9
+What move would you like to make? 
+Turn 4.
+O's turn.
+X|O|3
+X|5|6
+7|8|9
+
+Turn 5.
+X's turn.
+X|O|3
+X|5|6
+O|8|9
+What move would you like to make? 
+Turn 6.
+O's turn.
+X|O|3
+X|X|6
+O|8|9
+
+Turn 7.
+X's turn.
+X|O|3
+X|X|O
+O|8|9
+What move would you like to make? 
+Game Over.
+X has won.
+X|O|3
+X|X|O
+O|8|X
+Would you like to play again? [Y\n] }
+    assert_equal expected_output, FakeIO.each_input(["1", "4", "5", "9", "n"]) { cli.play_game }
+  end
+
 def test_play_again
     game = TicTacToe.new(Board.new)
     player1 = Player.new("X", [SimpleStrategy], :blue)
