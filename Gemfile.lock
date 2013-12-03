@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/bbuchalter/tictactoe.git
-  revision: 2b481903744c06c8f5f2b21b01a62c609ccb4857
+  revision: f73c04794872b4e6a01a92a707ddedfdb06f0d18
   specs:
     tictactoe (0.1.0)
 
