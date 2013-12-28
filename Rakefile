@@ -9,13 +9,33 @@ task :coverage do
   `open coverage/index.html`
 end
 
-task :build do
-  Rake::Task['collect_coverage'].invoke
-end
-
 task :collect_coverage do
   ENV['COVERAGE'] = 'true'
   Rake::Task['test'].invoke
 end
 
-task :default => :test
+task :lint do
+  sh 'rubocop -c .rubocop.yml'
+end
+
+task :build do
+  begin
+    Rake::Task['collect_coverage'].invoke
+    Rake::Task['lint'].invoke
+  rescue
+    puts "************************************"
+    puts "          BUILD FAILED"
+    puts "************************************"
+    exit 1
+  end
+end
+
+task :build_history do
+  sh 'git rev-list --reverse master | while read rev; do echo "\n\n\n**************\nBUILDING $rev" && git checkout -q $rev && rake; done; git checkout master'
+end
+
+task :build_since_push do
+  sh 'git rev-list --reverse origin/master..master | while read rev; do echo "\n\n\n**************\nBUILDING $rev" && git checkout -q $rev && rake; done; git checkout master'
+end
+
+task default: :build
