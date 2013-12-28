@@ -1,11 +1,11 @@
-require "colorize"
+require 'colorize'
 
 module CLIHelpers
   def clear_screen
     if fake_io?
-      puts ""
+      puts ''
     else
-      system("clear")
+      system('clear')
     end
   end
 
@@ -20,6 +20,6 @@ module CLIHelpers
   private
 
   def fake_io?
-    $>.class.name == 'FakeIO'
+    $stdout.class.name == 'FakeIO'
   end
 end

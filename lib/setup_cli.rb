@@ -1,19 +1,21 @@
-require "tictactoe/game"
-require "play_cli"
-require "cli_helpers"
+require 'tictactoe/game'
+require 'play_cli'
+require 'cli_helpers'
 
 class SetupCLI
   extend CLIHelpers
 
   def self.setup_game
     greet
-    player_one_type, player_one_symbol, player_one_color = setup_player("Player 1 (X's)", "X", :green)
-    player_two_type, player_two_symbol, player_two_color = setup_player("Player 2 (O's)", "O", :blue)
+
+    player_one_type  = ask_for_player_type("Player 1 (X's)", :green)
+    player_two_type = ask_for_player_type("Player 2 (O's)", :blue)
+
     confirm_start_game
 
     game = ::TicTacToe::Game.new
-    game.setup_player(player_one_type, player_one_symbol, player_one_color)
-    game.setup_player(player_two_type, player_two_symbol, player_two_color)
+    game.setup_player(player_one_type, 'X', :green)
+    game.setup_player(player_two_type, 'O', :blue)
     PlayCLI.new(game).play_game
   end
 
@@ -21,16 +23,16 @@ class SetupCLI
 
   def self.greet
     clear_screen
-    puts "Welcome to TicTacToe."
+    puts 'Welcome to TicTacToe.'
   end
 
-  def self.setup_player(name, symbol, color)
-    if player_is_computer(color, name).downcase == "y"
-      player = [:computer, symbol, color]
-      puts colored_message("Ok, #{symbol}'s will be played by the computer.", color)
+  def self.ask_for_player_type(name, color)
+    if player_is_computer(color, name).downcase == 'y'
+      player = :computer
+      puts colored_message("#{name} will be played by the computer.", color)
     else
-      player = [:human, symbol, color]
-      puts colored_message("Ok, #{symbol}'s will be played by a person.", color)
+      player = :human
+      puts colored_message("#{name} will be played by a person.", color)
     end
     player
   end
@@ -41,7 +43,7 @@ class SetupCLI
   end
 
   def self.confirm_start_game
-    puts "All set! Press ENTER to begin the game."
+    puts 'All set! Press ENTER to begin the game.'
     gets
   end
 end

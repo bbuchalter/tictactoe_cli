@@ -1,6 +1,6 @@
-require_relative "../test_helper"
-require "mocha/setup"
-require "cli_helpers"
+require_relative '../test_helper'
+require 'mocha/setup'
+require 'cli_helpers'
 
 class CLIHelpersTest < Minitest::Test
   class Dummy
@@ -9,7 +9,7 @@ class CLIHelpersTest < Minitest::Test
 
   def test_clear_screen
     dummy = Dummy.new
-    dummy.expects(:system).with("clear")
+    dummy.expects(:system).with('clear')
     dummy.clear_screen
   end
 

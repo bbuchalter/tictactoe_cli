@@ -1,0 +1,148 @@
+greeting: |
+
+  Welcome to TicTacToe.
+player_one_setup_computer: Should Player 1 (X's) be a computer? [N\y] Player 1 (X's) will be played by the computer.
+player_two_setup_computer: Should Player 2 (O's) be a computer? [N\y] Player 2 (O's) will be played by the computer.
+player_one_setup_human: Should Player 1 (X's) be a computer? [N\y] Player 1 (X's) will be played by a person.
+player_two_setup_human: Should Player 2 (O's) be a computer? [N\y] Player 2 (O's) will be played by a person.
+ready_to_play: |
+  All set! Press ENTER to begin the game.
+
+scenario_one: |
+  Turn 1.
+  X's turn.
+  1|2|3
+  4|5|6
+  7|8|9
+
+  Turn 2.
+  O's turn.
+  X|2|3
+  4|5|6
+  7|8|9
+
+  Turn 3.
+  X's turn.
+  X|2|3
+  4|O|6
+  7|8|9
+
+  Turn 4.
+  O's turn.
+  X|2|X
+  4|O|6
+  7|8|9
+
+  Turn 5.
+  X's turn.
+  X|O|X
+  4|O|6
+  7|8|9
+
+  Turn 6.
+  O's turn.
+  X|O|X
+  4|O|6
+  7|X|9
+
+  Turn 7.
+  X's turn.
+  X|O|X
+  O|O|6
+  7|X|9
+
+  Turn 8.
+  O's turn.
+  X|O|X
+  O|O|X
+  7|X|9
+
+  Turn 9.
+  X's turn.
+  X|O|X
+  O|O|X
+  7|X|O
+
+  Game Over.
+  The game is a draw.
+  X|O|X
+  O|O|X
+  X|X|O
+
+scenario_two: |
+  Turn 1.
+  X's turn.
+  1|2|3
+  4|5|6
+  7|8|9
+
+  Turn 2.
+  O's turn.
+  X|2|3
+  4|5|6
+  7|8|9
+  What position would you like to take? 
+  Turn 3.
+  X's turn.
+  X|2|3
+  4|5|6
+  7|8|O
+
+  Turn 4.
+  O's turn.
+  X|2|X
+  4|5|6
+  7|8|O
+  What position would you like to take? 
+  Turn 5.
+  X's turn.
+  X|2|X
+  4|O|6
+  7|8|O
+
+  Game Over.
+  X has won.
+  X|X|X
+  4|O|6
+  7|8|O
+
+scenario_three: |
+  Turn 1.
+  X's turn.
+  1|2|3
+  4|5|6
+  7|8|9
+
+  Turn 2.
+  O's turn.
+  X|2|3
+  4|5|6
+  7|8|9
+  What position would you like to take? That's not a valid position. Please try again.
+  What position would you like to take? That's not a valid position. Please try again.
+  What position would you like to take? 
+  Turn 3.
+  X's turn.
+  X|2|3
+  4|5|6
+  7|8|O
+
+  Turn 4.
+  O's turn.
+  X|2|X
+  4|5|6
+  7|8|O
+  What position would you like to take? Position 9 has already been taken. Please try again.
+  What position would you like to take? Position 9 has already been taken. Please try again.
+  What position would you like to take? 
+  Turn 5.
+  X's turn.
+  X|2|X
+  4|O|6
+  7|8|O
+
+  Game Over.
+  X has won.
+  X|X|X
+  4|O|6
+  7|8|O

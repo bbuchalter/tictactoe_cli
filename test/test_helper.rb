@@ -1,25 +1,39 @@
-require "rubygems"
+require 'rubygems'
 require 'pathname'
-gem "minitest"
+gem 'minitest'
 
-base_dir = Pathname.new(File.expand_path(__FILE__)).dirname.parent
-lib_dir = base_dir + "lib"
-test_dir = base_dir + "test"
-$:.unshift(lib_dir.to_s)
-$:.unshift(test_dir.to_s)
+def base_dir
+  Pathname.new(File.expand_path(__FILE__)).dirname.parent
+end
+
+def lib_dir
+  base_dir + 'lib'
+end
+
+def test_dir
+  base_dir + 'test'
+end
+
+$LOAD_PATH.unshift(lib_dir.to_s)
+$LOAD_PATH.unshift(test_dir.to_s)
 
 if ENV['COVERAGE'] == 'true'
   require 'simplecov'
   require 'json'
   SimpleCov.start do
     minimum_coverage 100
-    add_filter "/test/"
+    add_filter '/test/'
   end
 end
 
 require 'coveralls'
-if Coveralls.will_run?
-  Coveralls.wear!
-end
+Coveralls.wear! if Coveralls.will_run?
 
-require "minitest/autorun"
+require 'minitest/autorun'
+
+def output_scenarios
+  f = File.open(test_dir + 'support/output_scenarios.yml')
+  y = YAML.load(f)
+  f.close
+  y
+end

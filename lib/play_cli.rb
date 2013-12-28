@@ -1,4 +1,4 @@
-require "cli_helpers"
+require 'cli_helpers'
 
 class PlayCLI
   include CLIHelpers
@@ -8,7 +8,7 @@ class PlayCLI
   end
 
   def play_game
-    while !@game.game_over?
+    until @game.game_over?
       show_current_game_state
       make_move
     end
@@ -21,7 +21,8 @@ class PlayCLI
   def show_current_game_state
     clear_screen
     puts "Turn #{@game.turn_count + 1}."
-    puts colored_message("#{current_player.symbol}'s turn.", current_player.color)
+    puts colored_message("#{current_player.symbol}'s turn.",
+                         current_player.color)
     draw_board
   end
 
@@ -51,23 +52,21 @@ class PlayCLI
 
   def draw_boarders(position)
     if [3, 6, 9].include?(position.to_i)
-      puts ""
+      puts ''
     else
-      print "|"
+      print '|'
     end
   end
 
   def make_move
-    begin
-      position = determine_position_to_move
-      @game.make_move(position, current_player)
+    position = determine_position_to_move
+    @game.make_move(position, current_player)
     rescue ::TicTacToe::Board::PositionTaken
       puts "Position #{position} has already been taken. Please try again."
       make_move
     rescue ::TicTacToe::Board::InvalidPosition
       puts "That's not a valid position. Please try again."
       make_move
-    end
   end
 
   def determine_position_to_move
@@ -86,11 +85,12 @@ class PlayCLI
 
   def show_outcome
     clear_screen
-    puts "Game Over."
+    puts 'Game Over.'
     if draw?
-      puts "The game is a draw."
+      puts 'The game is a draw.'
     else
-      puts colored_message("#{last_move_by.symbol} has won.", last_move_by.color)
+      puts colored_message("#{last_move_by.symbol} has won.",
+                           last_move_by.color)
     end
     draw_board
   end
@@ -104,9 +104,9 @@ class PlayCLI
   end
 
   def offer_to_play_again
-    print "Would you like to play again? [Y\\n] "
+    print 'Would you like to play again? [Y\\n] '
     again = gets.chomp
-    if again != "n"
+    if again != 'n'
       reset_game
       play_game
     end
