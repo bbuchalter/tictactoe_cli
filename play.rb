@@ -6,5 +6,5 @@ $:.unshift(lib_dir.to_s)
 require "setup_cli"
 
 if __FILE__ == $0
-  SetupCLI.pick_players
+  game = SetupCLI.setup_game
 end

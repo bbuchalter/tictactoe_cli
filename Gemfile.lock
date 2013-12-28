@@ -5,15 +5,15 @@ GIT
     fake_io (0.1.0)
 
 GIT
-  remote: git://github.com/bbuchalter/tictactoe.git
-  revision: f9242d62ccdc75e5ff48b1543dc4b4699716d5ee
+  remote: git://github.com/bbuchalter/tictactoe_core.git
+  revision: 6cb39b4a59f6de964ea892b76738127c0fc76551
   specs:
-    tictactoe (0.1.0)
+    tictactoe_core (0.1.0)
 
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.2.15)
+    activesupport (3.2.16)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     arrayfields (4.9.0)
@@ -50,7 +50,7 @@ GEM
       ruby_parser (~> 3.1, > 3.1.0)
       sexp_processor (~> 4.4)
     hirb (0.7.1)
-    i18n (0.6.5)
+    i18n (0.6.9)
     json_pure (1.8.1)
     main (5.2.0)
       arrayfields (>= 4.7.4)
@@ -74,7 +74,7 @@ GEM
       roodi (~> 3.1)
     metric_fu-Saikuro (1.1.1.0)
     mime-types (2.0)
-    minitest (5.0.8)
+    minitest (5.2.0)
     mocha (0.14.0)
       metaclass (~> 0.0.1)
     multi_json (1.8.2)
@@ -88,10 +88,10 @@ GEM
       i18n
       require_all
       ruby-progressbar
-    rake (10.1.0)
+    rake (10.1.1)
     redcard (1.1.0)
-    reek (1.3.4)
-      ruby2ruby (~> 2.0.2)
+    reek (1.3.5)
+      ruby2ruby (~> 2.0.7)
       ruby_parser (~> 3.2)
       sexp_processor
     require_all (1.3.2)
@@ -99,13 +99,13 @@ GEM
       mime-types (>= 1.16)
     roodi (3.3.1)
       ruby_parser (~> 3.2, >= 3.2.2)
-    ruby-progressbar (1.2.0)
-    ruby2ruby (2.0.6)
+    ruby-progressbar (1.3.2)
+    ruby2ruby (2.0.7)
       ruby_parser (~> 3.1)
       sexp_processor (~> 4.0)
     ruby_parser (3.2.2)
       sexp_processor (~> 4.1)
-    sexp_processor (4.4.0)
+    sexp_processor (4.4.1)
     simplecov (0.8.2)
       docile (~> 1.1.0)
       multi_json
@@ -128,4 +128,4 @@ DEPENDENCIES
   mocha
   rake
   simplecov
-  tictactoe!
+  tictactoe_core!

@@ -3,14 +3,16 @@ require "mocha/setup"
 require "cli_helpers"
 
 class CLIHelpersTest < Minitest::Test
-  class Dummy; include CLIHelpers; end
-  
+  class Dummy
+    include CLIHelpers
+  end
+
   def test_clear_screen
     dummy = Dummy.new
     dummy.expects(:system).with("clear")
     dummy.clear_screen
   end
-  
+
   def test_colored_message
     message = stub
     color = stub

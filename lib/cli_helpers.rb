@@ -17,6 +17,8 @@ module CLIHelpers
     end
   end
 
+  private
+
   def fake_io?
     $>.class.name == 'FakeIO'
   end

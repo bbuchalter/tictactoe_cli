@@ -1,18 +1,20 @@
-require "tictactoe"
-require "board"
-require "player"
-require "strategies"
+require "tictactoe/game"
 require "play_cli"
 require "cli_helpers"
 
 class SetupCLI
   extend CLIHelpers
-  
-  def self.pick_players
+
+  def self.setup_game
     greet
-    player1 = setup_player("Player 1 (X's)", "X", :green)
-    player2 = setup_player("Player 2 (O's)", "O", :blue)
-    start_game(player1, player2)
+    player_one_type, player_one_symbol, player_one_color = setup_player("Player 1 (X's)", "X", :green)
+    player_two_type, player_two_symbol, player_two_color = setup_player("Player 2 (O's)", "O", :blue)
+    confirm_start_game
+
+    game = ::TicTacToe::Game.new
+    game.setup_player(player_one_type, player_one_symbol, player_one_color)
+    game.setup_player(player_two_type, player_two_symbol, player_two_color)
+    PlayCLI.new(game).play_game
   end
 
   private
@@ -24,10 +26,10 @@ class SetupCLI
 
   def self.setup_player(name, symbol, color)
     if player_is_computer(color, name).downcase == "y"
-      player = Player.new(symbol, Strategies.for_computer, color)
+      player = [:computer, symbol, color]
       puts colored_message("Ok, #{symbol}'s will be played by the computer.", color)
     else
-      player = Player.new(symbol, [UserInputStrategy], color)
+      player = [:human, symbol, color]
       puts colored_message("Ok, #{symbol}'s will be played by a person.", color)
     end
     player
@@ -38,10 +40,8 @@ class SetupCLI
     gets.chomp
   end
 
-  def self.start_game(player1, player2)
+  def self.confirm_start_game
     puts "All set! Press ENTER to begin the game."
     gets
-    game = TicTacToe.new(Board.new)
-    PlayCLI.new(game, player1, player2).play_game
   end
 end

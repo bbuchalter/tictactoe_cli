@@ -2,446 +2,91 @@ require_relative "../test_helper"
 require "mocha/setup"
 require "fake_io"
 require "play_cli"
-require "tictactoe"
-require "board"
-require "player"
-require "strategies"
+require "tictactoe/game"
 
 class PlayCLITest < Minitest::Test
-  def test_simple_strategy
-    game = TicTacToe.new(Board.new)
-    player1 = Player.new("X", [SimpleStrategy], :blue)
-    player2 = Player.new("O", [SimpleStrategy], :blue)
-    cli = PlayCLI.new(game, player1, player2)
-    expected_output = %q{
-Turn 1.
-X's turn.
-1|2|3
-4|5|6
-7|8|9
-
-Turn 2.
-O's turn.
-X|2|3
-4|5|6
-7|8|9
-
-Turn 3.
-X's turn.
-X|O|3
-4|5|6
-7|8|9
-
-Turn 4.
-O's turn.
-X|O|X
-4|5|6
-7|8|9
-
-Turn 5.
-X's turn.
-X|O|X
-O|5|6
-7|8|9
-
-Turn 6.
-O's turn.
-X|O|X
-O|X|6
-7|8|9
-
-Turn 7.
-X's turn.
-X|O|X
-O|X|O
-7|8|9
-
-Game Over.
-X has won.
-X|O|X
-O|X|O
-X|8|9
-Would you like to play again? [Y\n] }
-    assert_equal expected_output, FakeIO.each_input(["n"]) { cli.play_game }
+  def test_draw_game
+    cli = prepare_game({computer: {symbol: "X", color: :blue}},
+                       {computer: {symbol: "O", color: :green}})
+    human_input = ["n"]
+    expected_output = %Q{
+#{scenario_one}
+#{play_again_prompt}}
+    
+    assert_equal expected_output, FakeIO.each_input(human_input) { cli.play_game }
   end
 
-  def test_win_now_strategy
-    game = TicTacToe.new(Board.new)
-    player1 = Player.new("X", [UserInputStrategy], :blue)
-    player2 = Player.new("O", [WinNowStrategy, SimpleStrategy], :blue)
-    cli = PlayCLI.new(game, player1, player2)
-    expected_output = %q{
-Turn 1.
-X's turn.
-1|2|3
-4|5|6
-7|8|9
-What move would you like to make? 
-Turn 2.
-O's turn.
-1|2|3
-4|5|6
-7|8|X
-
-Turn 3.
-X's turn.
-O|2|3
-4|5|6
-7|8|X
-What move would you like to make? 
-Turn 4.
-O's turn.
-O|2|3
-4|X|6
-7|8|X
-
-Turn 5.
-X's turn.
-O|O|3
-4|X|6
-7|8|X
-What move would you like to make? 
-Turn 6.
-O's turn.
-O|O|X
-4|X|6
-7|8|X
-
-Turn 7.
-X's turn.
-O|O|X
-O|X|6
-7|8|X
-What move would you like to make? 
-Turn 8.
-O's turn.
-O|O|X
-O|X|6
-7|X|X
-
-Game Over.
-O has won.
-O|O|X
-O|X|6
-O|X|X
-Would you like to play again? [Y\n] }
-    assert_equal expected_output, FakeIO.each_input(["9", "5", "3", "8", "n"]) { cli.play_game }
+  def test_game_with_winner_and_human_input
+    cli = prepare_game({computer: {symbol: "X", color: :blue}},
+                       {human: {symbol: "O", color: :green}})
+    human_input = ["9", "5", "n"]
+    expected_output = %Q{
+#{scenario_two}
+#{play_again_prompt}}
+    
+    assert_equal expected_output, FakeIO.each_input(human_input) { cli.play_game }
   end
 
-  def test_block_opponent_strategy
-    game = TicTacToe.new(Board.new)
-    player1 = Player.new("X", [UserInputStrategy], :blue)
-    player2 = Player.new("O", [WinNowStrategy, BlockOpponentStrategy, SimpleStrategy], :blue)
-    cli = PlayCLI.new(game, player1, player2)
-    expected_output = %q{
-Turn 1.
-X's turn.
-1|2|3
-4|5|6
-7|8|9
-What move would you like to make? 
-Turn 2.
-O's turn.
-X|2|3
-4|5|6
-7|8|9
-
-Turn 3.
-X's turn.
-X|O|3
-4|5|6
-7|8|9
-What move would you like to make? 
-Turn 4.
-O's turn.
-X|O|3
-X|5|6
-7|8|9
-
-Turn 5.
-X's turn.
-X|O|3
-X|5|6
-O|8|9
-What move would you like to make? 
-Turn 6.
-O's turn.
-X|O|3
-X|X|6
-O|8|9
-
-Turn 7.
-X's turn.
-X|O|3
-X|X|O
-O|8|9
-What move would you like to make? 
-Game Over.
-X has won.
-X|O|3
-X|X|O
-O|8|X
-Would you like to play again? [Y\n] }
-    assert_equal expected_output, FakeIO.each_input(["1", "4", "5", "9", "n"]) { cli.play_game }
-  end
-
-  def test_take_center_strategy
-    game = TicTacToe.new(Board.new)
-    player1 = Player.new("X", [UserInputStrategy], :blue)
-    player2 = Player.new("O", [WinNowStrategy, BlockOpponentStrategy, TakeCenterStrategy, SimpleStrategy], :blue)
-    cli = PlayCLI.new(game, player1, player2)
-    expected_output = %q{
-Turn 1.
-X's turn.
-1|2|3
-4|5|6
-7|8|9
-What move would you like to make? 
-Turn 2.
-O's turn.
-X|2|3
-4|5|6
-7|8|9
-
-Turn 3.
-X's turn.
-X|2|3
-4|O|6
-7|8|9
-What move would you like to make? 
-Turn 4.
-O's turn.
-X|2|3
-4|O|6
-7|8|X
-
-Turn 5.
-X's turn.
-X|O|3
-4|O|6
-7|8|X
-What move would you like to make? 
-Turn 6.
-O's turn.
-X|O|3
-4|O|6
-7|X|X
-
-Turn 7.
-X's turn.
-X|O|3
-4|O|6
-O|X|X
-What move would you like to make? 
-Turn 8.
-O's turn.
-X|O|X
-4|O|6
-O|X|X
-
-Turn 9.
-X's turn.
-X|O|X
-4|O|O
-O|X|X
-What move would you like to make? 
-Game Over.
-The game is a draw.
-X|O|X
-X|O|O
-O|X|X
-Would you like to play again? [Y\n] }
-    assert_equal expected_output, FakeIO.each_input(["1", "9", "8", "3", "4", "n"]) { cli.play_game }
-  end
-
-def test_play_again
-    game = TicTacToe.new(Board.new)
-    player1 = Player.new("X", [SimpleStrategy], :blue)
-    player2 = Player.new("O", [SimpleStrategy], :blue)
-    cli = PlayCLI.new(game, player1, player2)
-    expected_output = %q{
-Turn 1.
-X's turn.
-1|2|3
-4|5|6
-7|8|9
-
-Turn 2.
-O's turn.
-X|2|3
-4|5|6
-7|8|9
-
-Turn 3.
-X's turn.
-X|O|3
-4|5|6
-7|8|9
-
-Turn 4.
-O's turn.
-X|O|X
-4|5|6
-7|8|9
-
-Turn 5.
-X's turn.
-X|O|X
-O|5|6
-7|8|9
-
-Turn 6.
-O's turn.
-X|O|X
-O|X|6
-7|8|9
-
-Turn 7.
-X's turn.
-X|O|X
-O|X|O
-7|8|9
-
-Game Over.
-X has won.
-X|O|X
-O|X|O
-X|8|9
-Would you like to play again? [Y\n] 
-Turn 1.
-X's turn.
-1|2|3
-4|5|6
-7|8|9
-
-Turn 2.
-O's turn.
-X|2|3
-4|5|6
-7|8|9
-
-Turn 3.
-X's turn.
-X|O|3
-4|5|6
-7|8|9
-
-Turn 4.
-O's turn.
-X|O|X
-4|5|6
-7|8|9
-
-Turn 5.
-X's turn.
-X|O|X
-O|5|6
-7|8|9
-
-Turn 6.
-O's turn.
-X|O|X
-O|X|6
-7|8|9
-
-Turn 7.
-X's turn.
-X|O|X
-O|X|O
-7|8|9
-
-Game Over.
-X has won.
-X|O|X
-O|X|O
-X|8|9
-Would you like to play again? [Y\n] }
-    assert_equal expected_output, FakeIO.each_input(["y", "n"]) { cli.play_game }
-  end
-
-  def test_tie_game
-    game = TicTacToe.new(Board.new)
-    player1 = Player.new("X", [UserInputStrategy], :blue)
-    player2 = Player.new("O", [SimpleStrategy], :blue)
-    cli = PlayCLI.new(game, player1, player2)
-    expected_output = %q{
-Turn 1.
-X's turn.
-1|2|3
-4|5|6
-7|8|9
-What move would you like to make? 
-Turn 2.
-O's turn.
-1|X|3
-4|5|6
-7|8|9
-
-Turn 3.
-X's turn.
-O|X|3
-4|5|6
-7|8|9
-What move would you like to make? 
-Turn 4.
-O's turn.
-O|X|3
-4|5|6
-X|8|9
-
-Turn 5.
-X's turn.
-O|X|O
-4|5|6
-X|8|9
-What move would you like to make? 
-Turn 6.
-O's turn.
-O|X|O
-X|5|6
-X|8|9
-
-Turn 7.
-X's turn.
-O|X|O
-X|O|6
-X|8|9
-What move would you like to make? 
-Turn 8.
-O's turn.
-O|X|O
-X|O|X
-X|8|9
-
-Turn 9.
-X's turn.
-O|X|O
-X|O|X
-X|O|9
-What move would you like to make? 
-Game Over.
-The game is a draw.
-O|X|O
-X|O|X
-X|O|X
-Would you like to play again? [Y\n] }
-    assert_equal expected_output, FakeIO.each_input(["2", "7", "4", "6", "9", "n"]) { cli.play_game }
+  def test_play_again
+    cli = prepare_game({computer: {symbol: "X", color: :blue}},
+                       {human: {symbol: "O", color: :green}})
+    human_input = ["9", "5", "y", "9", "5", "n"]
+    expected_output = %Q{
+#{scenario_two}
+#{play_again_prompt}
+#{scenario_two}
+#{play_again_prompt}}
+    
+    assert_equal expected_output, FakeIO.each_input(human_input) { cli.play_game }
   end
 
   def test_error_handling
-    game = TicTacToe.new(Board.new)
-    player1 = Player.new("X", [UserInputStrategy], :blue)
-    player2 = Player.new("O", [SimpleStrategy], :blue)
-    cli = PlayCLI.new(game, player1, player2)
-    expected_output = %q{
-Turn 1.
+    cli = prepare_game({computer: {symbol: "X", color: :blue}},
+                       {human: {symbol: "O", color: :green}})
+    human_input = ["asdf", "0", "9", "9", "9", "5", "n"]
+    expected_output = %Q{
+#{scenario_three}
+#{play_again_prompt}}
+    
+    assert_equal expected_output, FakeIO.each_input(human_input) { cli.play_game }
+  end
+  
+  private
+
+  def prepare_game(player_one_options, player_two_options)
+    player_one = prepare_player(player_one_options)
+    player_two = prepare_player(player_two_options)
+    game = TicTacToe::Game.new(player_one, player_two)
+    PlayCLI.new(game)
+  end
+
+  def prepare_player(options)
+    player_type = options.keys.first
+    player_options = options.values.first
+    symbol = player_options[:symbol]
+    color = player_options[:color]
+
+    player_class(player_type).new(symbol, color)
+  end
+
+  def player_class(player_type)
+    case (player_type)
+      when :computer
+        TicTacToe::Player::Computer
+      when :human
+        TicTacToe::Player::Human
+      else
+        raise "Bad player type: #{player_type}"
+    end
+  end
+  
+  def scenario_one
+%q{Turn 1.
 X's turn.
 1|2|3
 4|5|6
 7|8|9
-What move would you like to make? That's not a valid move. Please try again.
-What move would you like to make? That's not a valid move. Please try again.
-What move would you like to make? 
+
 Turn 2.
 O's turn.
 X|2|3
@@ -450,41 +95,134 @@ X|2|3
 
 Turn 3.
 X's turn.
-X|O|3
-4|5|6
+X|2|3
+4|O|6
 7|8|9
-What move would you like to make? 
+
 Turn 4.
 O's turn.
-X|O|X
-4|5|6
+X|2|X
+4|O|6
 7|8|9
 
 Turn 5.
 X's turn.
 X|O|X
-O|5|6
+4|O|6
 7|8|9
-What move would you like to make? That position has already been taken. Please try again.
-What move would you like to make? 
+
 Turn 6.
 O's turn.
 X|O|X
-O|X|6
-7|8|9
+4|O|6
+7|X|9
 
 Turn 7.
 X's turn.
 X|O|X
-O|X|O
+O|O|6
+7|X|9
+
+Turn 8.
+O's turn.
+X|O|X
+O|O|X
+7|X|9
+
+Turn 9.
+X's turn.
+X|O|X
+O|O|X
+7|X|O
+
+Game Over.
+The game is a draw.
+X|O|X
+O|O|X
+X|X|O}
+  end
+  
+  def play_again_prompt
+    "Would you like to play again? [Y\\n] "
+  end
+
+  def scenario_two
+    %q{Turn 1.
+X's turn.
+1|2|3
+4|5|6
 7|8|9
-What move would you like to make? 
+
+Turn 2.
+O's turn.
+X|2|3
+4|5|6
+7|8|9
+What position would you like to take? 
+Turn 3.
+X's turn.
+X|2|3
+4|5|6
+7|8|O
+
+Turn 4.
+O's turn.
+X|2|X
+4|5|6
+7|8|O
+What position would you like to take? 
+Turn 5.
+X's turn.
+X|2|X
+4|O|6
+7|8|O
+
 Game Over.
 X has won.
-X|O|X
-O|X|O
-X|8|9
-Would you like to play again? [Y\n] }
-    assert_equal expected_output, FakeIO.each_input(["asdf","0","1", "3", "3", "5", "7", "n"]) { cli.play_game }
+X|X|X
+4|O|6
+7|8|O}
+  end
+  
+  def scenario_three
+    %q{Turn 1.
+X's turn.
+1|2|3
+4|5|6
+7|8|9
+
+Turn 2.
+O's turn.
+X|2|3
+4|5|6
+7|8|9
+What position would you like to take? That's not a valid position. Please try again.
+What position would you like to take? That's not a valid position. Please try again.
+What position would you like to take? 
+Turn 3.
+X's turn.
+X|2|3
+4|5|6
+7|8|O
+
+Turn 4.
+O's turn.
+X|2|X
+4|5|6
+7|8|O
+What position would you like to take? Position 9 has already been taken. Please try again.
+What position would you like to take? Position 9 has already been taken. Please try again.
+What position would you like to take? 
+Turn 5.
+X's turn.
+X|2|X
+4|O|6
+7|8|O
+
+Game Over.
+X has won.
+X|X|X
+4|O|6
+7|8|O}
   end
 end
